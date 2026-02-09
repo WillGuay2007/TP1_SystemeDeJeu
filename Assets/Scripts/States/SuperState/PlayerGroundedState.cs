@@ -26,8 +26,8 @@ public class PlayerGroundedState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        xInput = player.inputManager.inputX;
-        yInput = player.inputManager.inputY;
+        xInput = player.inputManager.smoothInputX;
+        yInput = player.inputManager.smoothInputY;
 
         if (player.inputManager.JumpInput)
         {
