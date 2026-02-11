@@ -56,7 +56,7 @@ public class PlayerInputManager : MonoBehaviour
     private void SmoothenMovement()
     {
         float smoothSpeed = 5f;
-        float threshold = 0.03f;
+        float threshold = 0.1f;
 
         smoothInputX = Mathf.Lerp(smoothInputX, inputX, smoothSpeed * Time.deltaTime);
         smoothInputY = Mathf.Lerp(smoothInputY, inputY, smoothSpeed * Time.deltaTime);
