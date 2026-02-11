@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public PlayerStateMachine stateMachine { get; private set; }
     public PlayerIdleState idleState { get; private set; }
     public PlayerMoveState moveState { get; private set; }
+    public PlayerJumpState jumpState { get; private set; }
+    public PlayerInAirState inAirState { get; private set; }
     public PlayerInputManager inputManager { get; private set; }
     public Rigidbody rigidBody { get; private set; }
     public Vector3 currentVelocity { get; private set; }
@@ -23,6 +25,8 @@ public class PlayerController : MonoBehaviour
         stateMachine = new PlayerStateMachine(this);
         idleState = new PlayerIdleState(this, stateMachine, playerData, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, playerData, "Move");
+        jumpState = new PlayerJumpState(this, stateMachine, playerData, "Jump");
+        inAirState = new PlayerInAirState(this, stateMachine, playerData, "InAir");
         currentVelocity = rigidBody.linearVelocity;
     }
 
@@ -43,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     public bool CheckIfGrounded()
     {
-        return Physics.OverlapSphere(groundCheckTransform.position, playerData.groundCheckRadius, playerData.whatIsGround) != null;
+        return Physics.OverlapSphere(groundCheckTransform.position, playerData.groundCheckRadius, playerData.whatIsGround).Length > 0;
     }
 
     public void SetVelocityX(float x)

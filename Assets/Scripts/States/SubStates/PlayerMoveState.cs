@@ -36,13 +36,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (xInput != 0)
-        {
-            player.SetVelocityX(xInput * playerData.movementVelocity);
-        }
-
-        if (yInput != 0) {
-            player.SetVelocityZ(yInput * playerData.movementVelocity);
-        }
+        player.SetVelocityX(xInput * playerData.movementVelocity);
+        player.SetVelocityZ(yInput * playerData.movementVelocity);
     }
 }

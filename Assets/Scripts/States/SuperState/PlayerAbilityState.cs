@@ -30,7 +30,7 @@ public class PlayerAbilityState : PlayerState
         base.LogicUpdate();
         if (isAbilityDone)
         {
-            stateMachine.SetState(player.idleState);
+            stateMachine.SetState(player.inAirState);
         }
     }
 
