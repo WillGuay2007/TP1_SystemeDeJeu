@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
-public class PlayerInputManager : MonoBehaviour
+public class PlayerInputController : MonoBehaviour
 {
     public Vector2 RawMovementInput {  get; private set; }
     public Vector2 SmoothMovementInput { get; private set; }
@@ -10,20 +11,26 @@ public class PlayerInputManager : MonoBehaviour
     public float smoothInputX { get; private set; }
     public float smoothInputY { get; private set; }
     public bool JumpInput { get; private set; }
-    public bool JumpInputStop { get; private set; }
-    private Vector2 Velocity;
+    private bool isInputDisabled;
 
     [SerializeField] private float m_jumpInputHoldTime = 0.2f;
     private float m_jumpInputStartTime;
 
+    private void Awake()
+    {
+        HealthController.OnDeath += DisableInput;
+    }
+
     private void Update()
     {
+        if (isInputDisabled) return;
         CheckJumpInputHoldTime();
         SmoothenMovement();
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (isInputDisabled) return;
         RawMovementInput = context.ReadValue<Vector2>();
         inputX = RawMovementInput.x;
         inputY = RawMovementInput.y;
@@ -31,16 +38,11 @@ public class PlayerInputManager : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (isInputDisabled) return;
         if (context.started)
         {
             JumpInput = true;
-            JumpInputStop = false;
             m_jumpInputStartTime = Time.time;
-        }
-
-        if (context.canceled)
-        {
-            JumpInputStop = true;
         }
     }
 
@@ -66,5 +68,24 @@ public class PlayerInputManager : MonoBehaviour
         if (Mathf.Abs(smoothInputY - inputY) < threshold) smoothInputY = inputY;
     }
 
+    private void ClearInputs()
+    {
+        inputX = 0;
+        inputY = 0;
+        smoothInputX = 0;
+        smoothInputY = 0;
+        JumpInput = false;
+    }
+
+    private void EnableInput()
+    {
+        isInputDisabled = false;
+    }
+
+    private void DisableInput()
+    {
+        isInputDisabled = true;
+        ClearInputs();
+    }
 
 }

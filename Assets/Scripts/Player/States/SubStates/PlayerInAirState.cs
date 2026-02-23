@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerInAirState : PlayerState
 {
     private bool m_isGrounded;
-    private float m_xInput;
-    private float m_yInput;
+    private float xInput;
+    private float yInput;
     public PlayerInAirState(PlayerController playerController, PlayerStateMachine plrStateMachine, PlayerData plrData, string animBool) : base(playerController, plrStateMachine, plrData, animBool)
     {
     }
@@ -28,12 +29,12 @@ public class PlayerInAirState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        m_xInput = player.inputManager.smoothInputX;
-        m_yInput = player.inputManager.smoothInputY;
+        xInput = player.inputManager.smoothInputX;
+        yInput = player.inputManager.smoothInputY;
 
         if (m_isGrounded)
         {
-            if (m_xInput != 0 || m_yInput != 0)
+            if (xInput != 0 || yInput != 0)
             {
                 stateMachine.SetState(player.moveState);
             }
@@ -47,7 +48,20 @@ public class PlayerInAirState : PlayerState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        player.SetVelocityX(m_xInput * playerData.movementVelocity);
-        player.SetVelocityZ(m_yInput * playerData.movementVelocity);
+
+        Vector3 forward = player.transform.forward;
+        Vector3 right = player.transform.right;
+
+        Vector3 moveDir = (forward * yInput + right * xInput);
+
+        Vector3 currentVel = player.currentVelocity;
+
+        Vector3 targetVel = new Vector3(
+            moveDir.x * playerData.movementVelocity,
+            currentVel.y,
+            moveDir.z * playerData.movementVelocity
+        );
+
+        player.SetVelocity(targetVel);
     }
 }

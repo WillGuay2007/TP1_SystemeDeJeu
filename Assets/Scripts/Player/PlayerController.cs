@@ -10,9 +10,9 @@ public class PlayerController : MonoBehaviour
     public PlayerMoveState moveState { get; private set; }
     public PlayerJumpState jumpState { get; private set; }
     public PlayerInAirState inAirState { get; private set; }
-    public PlayerInputManager inputManager { get; private set; }
+    public PlayerInputController inputManager { get; private set; }
     public Rigidbody rigidBody { get; private set; }
-    public Vector3 currentVelocity { get; private set; }
+    public Vector3 currentVelocity => rigidBody.linearVelocity;
     public bool isGrounded { get; private set; }
     [SerializeField] private Transform groundCheckTransform;
     [SerializeField] private PlayerData playerData;
@@ -20,14 +20,13 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        inputManager = GetComponent<PlayerInputManager>();
+        inputManager = GetComponent<PlayerInputController>();
         rigidBody = GetComponent<Rigidbody>();
         stateMachine = new PlayerStateMachine(this);
         idleState = new PlayerIdleState(this, stateMachine, playerData, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, playerData, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, playerData, "Jump");
         inAirState = new PlayerInAirState(this, stateMachine, playerData, "InAir");
-        currentVelocity = rigidBody.linearVelocity;
     }
 
     private void Start()
@@ -52,23 +51,20 @@ public class PlayerController : MonoBehaviour
 
     public void SetVelocityX(float x)
     {
-        SetNewCurrentVelocity();
         rigidBody.linearVelocity = new Vector3(x, currentVelocity.y, currentVelocity.z);
     }
 
     public void SetVelocityY(float y) {
-        SetNewCurrentVelocity();
         rigidBody.linearVelocity = new Vector3(currentVelocity.x, y, currentVelocity.z);
     }
 
     public void SetVelocityZ(float z) {
-        SetNewCurrentVelocity();
         rigidBody.linearVelocity = new Vector3(currentVelocity.x, currentVelocity.y, z);
     }
 
-    public void SetNewCurrentVelocity()
+    public void SetVelocity(Vector3 velocity)
     {
-        currentVelocity = rigidBody.linearVelocity;
+        rigidBody.linearVelocity = velocity;
     }
 
 }
