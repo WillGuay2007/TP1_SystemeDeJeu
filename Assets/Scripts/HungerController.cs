@@ -6,30 +6,52 @@ using UnityEngine.UI;
 public class HungerController : MonoBehaviour
 {
 
-    public static event Action<float> OnHungerDrain;
+    public static event Action<float> OnHungerChanged;
     public static event Action<bool> OnNewStarvationState;
 
     [SerializeField] private int m_maximumHunger;
     private float m_currentHunger;
+    public float CurrentHunger
+    {
+        get => m_currentHunger;
+        private set
+        {
+            m_currentHunger = value;
+            OnHungerChanged?.Invoke(value / m_maximumHunger);
+        }
+    }
     private float m_hungerIncrement { get { return m_maximumHunger * 0.01f; } }
 
     private void Awake()
     {
-        m_currentHunger = 0;
+        OnHungerChanged?.Invoke(0); //Update le UI au start
+        ItemController.OnConsumableCollected += ConsumeItem;
+
+        CurrentHunger = 0;
         StartCoroutine(GainHunger());
+    }
+
+    private void ConsumeItem(float hungerValue)
+    {
+        if (CurrentHunger >= m_maximumHunger)
+        {
+            print("[HUNGER CONTROLLER] -> Starvation ends");
+            OnNewStarvationState?.Invoke(false);
+        }
+        CurrentHunger -= hungerValue;
+        CurrentHunger = Mathf.Clamp(CurrentHunger, 0, m_maximumHunger);
     }
 
     private IEnumerator GainHunger()
     {
         while (true) {
-            if ((m_currentHunger + m_hungerIncrement >= m_maximumHunger) && (m_currentHunger < m_maximumHunger))
+            if ((CurrentHunger + m_hungerIncrement >= m_maximumHunger) && (CurrentHunger < m_maximumHunger))
             {
                 print("[HUNGER CONTROLLER] -> Starvation begins");
                 OnNewStarvationState?.Invoke(true);
             }
-            m_currentHunger += m_hungerIncrement;
-            m_currentHunger = Mathf.Clamp(m_currentHunger, 0f, m_maximumHunger);
-            OnHungerDrain?.Invoke(Mathf.Clamp((m_currentHunger / m_maximumHunger), 0f, 1f));
+            CurrentHunger += m_hungerIncrement;
+            CurrentHunger = Mathf.Clamp(CurrentHunger, 0f, m_maximumHunger);
             yield return new WaitForSeconds(1f);
         }
     }

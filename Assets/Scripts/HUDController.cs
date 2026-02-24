@@ -20,12 +20,13 @@ public class HUDController : MonoBehaviour
     {
         //HUNGER
         m_sliderForeground = m_hungerSlider.transform.Find("Fill Area/Fill");
-        HungerController.OnHungerDrain += ReDrawHungerUI;
+        HungerController.OnHungerChanged += ReDrawHungerUI;
 
         //HEALTH
         HealthController.OnTakeDamage += RedrawHealthUI;
 
         //LEVEL AND EXPERIENCE
+        ExperienceController.OnExperienceChanged += RedrawExperienceUI;
     }
 
     private void ReDrawHungerUI(float hungerFraction)
@@ -41,8 +42,9 @@ public class HUDController : MonoBehaviour
         m_healthTextLabel.text = "Health: " + newHP.ToString() + " HP";
     }
 
-    private void RedrawExperienceUI()
+    private void RedrawExperienceUI(float experienceFraction, int level)
     {
-
+        m_experienceSlider.value = experienceFraction;
+        m_levelText.text = "Level: " + level.ToString();
     }
 }

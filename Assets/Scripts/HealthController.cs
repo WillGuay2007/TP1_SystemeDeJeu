@@ -24,6 +24,7 @@ public class HealthController : MonoBehaviour
         OnTakeDamage?.Invoke(damage, Mathf.Clamp((m_currentHealth / m_maxHealth), 0f, 1f), m_currentHealth);
         if (m_currentHealth <= 0f)
         {
+            print("[HEALTH CONTROLLER] -> Player died.");
             OnDeath?.Invoke();
         }
     }
@@ -36,7 +37,7 @@ public class HealthController : MonoBehaviour
         }
         else
         {
-            StopCoroutine(HungerHealthDrain());
+            StopCoroutine(m_hungerHealthDrainCoroutine);
             m_hungerHealthDrainCoroutine = null;
         }
     }
