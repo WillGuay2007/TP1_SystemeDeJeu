@@ -8,7 +8,7 @@ public class ExperienceController : MonoBehaviour
     public static event Action<float, int> OnExperienceChanged;
 
     private float m_currentExperience = 0f;
-    private float m_fraction => m_currentExperience / m_amountOfExperienceForLvlUp;
+    private float m_fraction => (m_currentExperience % 100) / m_amountOfExperienceForLvlUp;
 
     public float CurrentExperience
     {
