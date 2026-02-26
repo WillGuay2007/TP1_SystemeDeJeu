@@ -26,6 +26,7 @@ public class HungerController : MonoBehaviour
     {
         OnHungerChanged?.Invoke(0); //Update le UI au start
         ItemController.OnConsumableCollected += ConsumeItem;
+        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => ConsumeItem(hunger);
 
         CurrentHunger = 0;
         StartCoroutine(GainHunger());

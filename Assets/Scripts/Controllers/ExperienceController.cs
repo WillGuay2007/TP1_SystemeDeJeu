@@ -27,6 +27,7 @@ public class ExperienceController : MonoBehaviour
     {
         OnExperienceChanged?.Invoke(m_fraction, CurrentLevel);
         ItemController.OnQuestItemCollected += AddExperience;
+        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => AddExperience(exp);
     }
 
     private void AddExperience(float experience)

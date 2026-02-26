@@ -2453,7 +2453,7 @@ GameObject:
   - component: {fileID: 1357059450}
   - component: {fileID: 1357059449}
   - component: {fileID: 1357059448}
-  - component: {fileID: 1357059447}
+  - component: {fileID: 1357059452}
   m_Layer: 0
   m_Name: SpecialItem
   m_TagString: Untagged
@@ -2461,20 +2461,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1357059447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357059446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f087302869d1c164887b236dc9d6cb6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_itemController: {fileID: 59525667}
-  experienceAmount: 20
 --- !u!65 &1357059448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2564,6 +2550,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1357059452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357059446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 021c21ec19bb2fc4db0e40c7fdb50fb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_itemController: {fileID: 59525667}
+  damageAmount: 25
+  hungerAmount: 20
+  expAmount: 50
 --- !u!1001 &1475508824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3205,6 +3207,7 @@ Transform:
   - {fileID: 2014259029}
   - {fileID: 59525668}
   - {fileID: 227425000}
+  - {fileID: 2071661604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1924173547
@@ -3606,6 +3609,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068739302}
   m_CullTransparentMesh: 1
+--- !u!1 &2071661603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071661604}
+  - component: {fileID: 2071661605}
+  m_Layer: 0
+  m_Name: InventoryController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071661604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071661603}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1910726748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2071661605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071661603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8748a5cb5775a0346b77bfb7ea1869d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2090961517
 GameObject:
   m_ObjectHideFlags: 0

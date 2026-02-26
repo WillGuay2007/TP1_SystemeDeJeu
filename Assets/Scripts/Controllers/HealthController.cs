@@ -15,18 +15,19 @@ public class HealthController : MonoBehaviour
     {
         m_currentHealth = m_maxHealth;
         HungerController.OnNewStarvationState += SetStarvation;
+        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => Damage(dmg);
     }
 
     private void Damage(float damage)
     {
-        m_currentHealth -= damage;
-        m_currentHealth = Mathf.Max(m_currentHealth, 0);
-        OnTakeDamage?.Invoke(damage, Mathf.Clamp((m_currentHealth / m_maxHealth), 0f, 1f), m_currentHealth);
-        if (m_currentHealth <= 0f)
+        if (m_currentHealth > 0 && m_currentHealth - damage <= 0f)
         {
             print("[HEALTH CONTROLLER] -> Player died.");
             OnDeath?.Invoke();
         }
+        m_currentHealth -= damage;
+        m_currentHealth = Mathf.Max(m_currentHealth, 0);
+        OnTakeDamage?.Invoke(damage, Mathf.Clamp((m_currentHealth / m_maxHealth), 0f, 1f), m_currentHealth);
     }
 
     private void SetStarvation(bool isStarving)
