@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
@@ -6,6 +7,7 @@ public class PlayerInputController : MonoBehaviour
 {
     public Vector2 RawMovementInput {  get; private set; }
     public Vector2 SmoothMovementInput { get; private set; }
+    public static event Action<bool> OnSprintInputChanged;
     public float inputX { get; private set; }
     public float inputY { get; private set; }
     public float smoothInputX { get; private set; }
@@ -38,6 +40,19 @@ public class PlayerInputController : MonoBehaviour
         inputY = RawMovementInput.y;
     }
 
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (isInputDisabled) return;
+        if (context.started)
+        {
+            OnSprintInputChanged?.Invoke(true);
+        }
+        else if (context.canceled)
+        {
+            OnSprintInputChanged?.Invoke(false);
+        }
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
         if (isInputDisabled) return;
@@ -45,6 +60,9 @@ public class PlayerInputController : MonoBehaviour
         {
             JumpInput = true;
             m_jumpInputStartTime = Time.time;
+        } else if (context.canceled)
+        {
+            JumpInput = false;
         }
     }
 

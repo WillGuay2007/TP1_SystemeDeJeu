@@ -6,8 +6,12 @@ public class PlayerInAirState : PlayerState
     private bool m_isGrounded;
     private float xInput;
     private float yInput;
+
+    private bool m_isSprinting;
+    private float m_sprintMultiplier = 1.5f;
     public PlayerInAirState(PlayerController playerController, PlayerStateMachine plrStateMachine, PlayerData plrData, string animBool) : base(playerController, plrStateMachine, plrData, animBool)
     {
+        PlayerInputController.OnSprintInputChanged += sprinting => m_isSprinting = sprinting;
     }
 
     public override void DoChecks()
@@ -62,6 +66,6 @@ public class PlayerInAirState : PlayerState
             moveDir.z * playerData.movementVelocity
         );
 
-        player.SetVelocity(targetVel);
+        player.SetVelocity(!m_isSprinting ? targetVel : targetVel * m_sprintMultiplier);
     }
 }

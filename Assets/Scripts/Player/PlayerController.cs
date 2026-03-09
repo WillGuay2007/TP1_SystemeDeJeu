@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//C'EST PAS VRAIMENT UN CONTROLLER CELUI LA.
 public class PlayerController : MonoBehaviour
 {
     public Animator animator { get; private set; }

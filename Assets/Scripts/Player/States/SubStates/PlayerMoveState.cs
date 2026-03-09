@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerGroundedState
 {
+    private bool m_isSprinting;
+    private float m_sprintMultiplier = 1.5f;
     public PlayerMoveState(PlayerController playerController, PlayerStateMachine plrStateMachine, PlayerData plrData, string animBool) : base(playerController, plrStateMachine, plrData, animBool)
     {
+        PlayerInputController.OnSprintInputChanged += sprinting => m_isSprinting = sprinting;
     }
 
     public override void DoChecks()
@@ -50,6 +53,6 @@ public class PlayerMoveState : PlayerGroundedState
             moveDir.z * playerData.movementVelocity
         );
 
-        player.SetVelocity(targetVel);
+        player.SetVelocity(!m_isSprinting ? targetVel : targetVel * m_sprintMultiplier);
     }
 }

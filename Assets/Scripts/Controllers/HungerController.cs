@@ -8,6 +8,7 @@ public class HungerController : MonoBehaviour
 
     public static event Action<float> OnHungerChanged;
     public static event Action<bool> OnNewStarvationState;
+    private bool m_isSprinting = false;
 
     [SerializeField] private int m_maximumHunger;
     private float m_currentHunger;
@@ -27,6 +28,7 @@ public class HungerController : MonoBehaviour
         OnHungerChanged?.Invoke(0); //Update le UI au start
         ItemController.OnConsumableCollected += ConsumeItem;
         ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => ConsumeItem(hunger);
+        PlayerInputController.OnSprintInputChanged += isSprinting => m_isSprinting = isSprinting;
 
         CurrentHunger = 0;
         StartCoroutine(GainHunger());
@@ -51,7 +53,7 @@ public class HungerController : MonoBehaviour
                 print("[HUNGER CONTROLLER] -> Starvation begins");
                 OnNewStarvationState?.Invoke(true);
             }
-            CurrentHunger += m_hungerIncrement;
+            CurrentHunger += !m_isSprinting ? m_hungerIncrement : m_hungerIncrement * 2;
             CurrentHunger = Mathf.Clamp(CurrentHunger, 0f, m_maximumHunger);
             yield return new WaitForSeconds(1f);
         }

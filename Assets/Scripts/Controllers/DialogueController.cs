@@ -12,6 +12,8 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private Button m_declineButton;
     [SerializeField] private float m_typewriterSpeed;
 
+    private DialogueObject m_currentDialogueObject;
+
     public static event Action OnDialogueStarted;
     public static event Action OnDialogueEnded;
 
@@ -35,16 +37,19 @@ public class DialogueController : MonoBehaviour
     public void ShowDialogue(DialogueObject data)
     {
         if (m_activeDialogue != null) return;
-        m_activeDialogue = StartCoroutine(StartDialogue(data));
+        m_activeDialogue = StartCoroutine(StartDialogue(data, true));
     }
 
-    private IEnumerator StartDialogue(DialogueObject data)
+    private IEnumerator StartDialogue(DialogueObject data, bool isFirstCall)
     {
-        OnDialogueStarted?.Invoke();
+        if (isFirstCall) {
+            print("[DIALOGUE CONTROLLER] -> Dialogue started");
+            OnDialogueStarted?.Invoke();
+        }
         m_dialogueBox.SetActive(true);
 
-        SetButtonTransparency(m_acceptButton, true);
-        SetButtonTransparency(m_declineButton, true);
+        SetButtonTransparency(m_acceptButton, true, "");
+        SetButtonTransparency(m_declineButton, true, "");
 
         yield return StartCoroutine(TypewriterEffect(data.DialogueNode));
         if (data.refused == null || data.accepted == null)
@@ -55,12 +60,13 @@ public class DialogueController : MonoBehaviour
         }
         else
         {
-            SetButtonTransparency(m_acceptButton, false);
-            SetButtonTransparency(m_declineButton, false);
+            m_currentDialogueObject = data;
+            SetButtonTransparency(m_acceptButton, false, "Accept");
+            SetButtonTransparency(m_declineButton, false, "Decline");
         }
     }
 
-    private void SetButtonTransparency(Button button, bool isTransparent)
+    private void SetButtonTransparency(Button button, bool isTransparent, string newText)
     {
         Color col = button.GetComponent<Image>().color;
         if (isTransparent)
@@ -68,17 +74,20 @@ public class DialogueController : MonoBehaviour
             col.a = 0;
             button.enabled = false;
         }
+        else { button.enabled = true; col.a = 1; }
+
+        button.GetComponentInChildren<TMP_Text>().text = newText;
         button.GetComponent<Image>().color = col;
     }
 
     private void OnDenied()
     {
-
+        StartCoroutine(StartDialogue(m_currentDialogueObject.refused, false));
     }
 
     private void OnAccepted()
     {
-
+        StartCoroutine(StartDialogue(m_currentDialogueObject.accepted, false));
     }
 
     private IEnumerator TypewriterEffect(string textToWrite)
@@ -99,7 +108,9 @@ public class DialogueController : MonoBehaviour
 
     private void CloseDialogue()
     {
+        print("[DIALOGUE CONTROLLER] -> Dialogue ended");
         OnDialogueEnded?.Invoke();
+        m_currentDialogueObject = null;
         m_dialogueBox.SetActive(false);
         m_activeDialogue = null;
     }

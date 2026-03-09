@@ -9,13 +9,18 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float m_initialCameraDistance;
     private Vector3 m_localRot;
     private float m_cameraDistanceOffset;
+    private float m_sprintingOffset = 0f;
 
+    private void Awake()
+    {
+        PlayerInputController.OnSprintInputChanged += sprinting => m_sprintingOffset = sprinting ? -0.5f : 0f; ;
+    }
     void Update()
     {
         m_cameraDistanceOffset += Input.GetAxis("Mouse ScrollWheel");
         m_cameraDistanceOffset = Mathf.Clamp(m_cameraDistanceOffset, -1f, 1f);
         m_pivotPoint.transform.position = m_Player.transform.position + Vector3.up;
-        transform.position = m_pivotPoint.position - m_pivotPoint.forward * (m_initialCameraDistance - m_cameraDistanceOffset);
+        transform.position = m_pivotPoint.position - m_pivotPoint.forward * (m_initialCameraDistance - m_cameraDistanceOffset - m_sprintingOffset);
         transform.LookAt(m_pivotPoint.position);
         if (!Input.GetMouseButton(1)) return;
         m_localRot.x += Input.GetAxis("Mouse X") * m_sensitivity;
