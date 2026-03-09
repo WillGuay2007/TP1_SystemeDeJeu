@@ -1444,7 +1444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &411461367
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4078,7 +4078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1887466147
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5140,7 +5140,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_textLabel: {fileID: 1924173550}
   m_dialogueBox: {fileID: 86967504}
+  m_acceptButton: {fileID: 1887466148}
+  m_declineButton: {fileID: 411461368}
   m_typewriterSpeed: 12
+  m_dialogueObject: {fileID: 11400000, guid: 45d4f3bb9e2ff774193e8c4dc85708c7, type: 2}
 --- !u!4 &2090961519
 Transform:
   m_ObjectHideFlags: 0

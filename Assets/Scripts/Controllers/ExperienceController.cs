@@ -6,9 +6,11 @@ public class ExperienceController : MonoBehaviour
     [SerializeField] private float m_amountOfExperienceForLvlUp = 100f;
 
     public static event Action<float, int> OnExperienceChanged;
+    public static event Action<int> OnLevelUp;
+
 
     private float m_currentExperience = 0f;
-    private float m_fraction => (m_currentExperience % 100) / m_amountOfExperienceForLvlUp;
+    private float m_fraction => (m_currentExperience % m_amountOfExperienceForLvlUp) / m_amountOfExperienceForLvlUp;
 
     public float CurrentExperience
     {
@@ -32,6 +34,10 @@ public class ExperienceController : MonoBehaviour
 
     private void AddExperience(float experience)
     {
+        if (((CurrentExperience + experience) / m_amountOfExperienceForLvlUp) >= CurrentLevel + 1)
+        {
+            OnLevelUp?.Invoke(CurrentLevel);
+        }
         CurrentExperience += experience;
     }
 }

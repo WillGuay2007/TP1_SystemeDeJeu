@@ -23,7 +23,7 @@ public class HUDController : MonoBehaviour
         HungerController.OnHungerChanged += ReDrawHungerUI;
 
         //HEALTH
-        HealthController.OnTakeDamage += RedrawHealthUI;
+        HealthController.OnHealthChanged += RedrawHealthUI;
 
         //LEVEL AND EXPERIENCE
         ExperienceController.OnExperienceChanged += RedrawExperienceUI;
@@ -36,7 +36,7 @@ public class HUDController : MonoBehaviour
         m_sliderForeground.GetComponent<Image>().color = new Color(hungerFraction, 1f - hungerFraction, 0f, 1f);
     }
 
-    private void RedrawHealthUI(float TakenDamage, float healthFraction, float newHP)
+    private void RedrawHealthUI(float newHP, float healthFraction)
     {
         m_healthSlider.value = healthFraction;
         m_healthTextLabel.text = "Health: " + newHP.ToString() + " HP";

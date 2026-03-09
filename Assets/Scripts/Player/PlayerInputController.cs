@@ -19,6 +19,8 @@ public class PlayerInputController : MonoBehaviour
     private void Awake()
     {
         HealthController.OnDeath += DisableInput;
+        DialogueController.OnDialogueStarted += DisableInput;
+        DialogueController.OnDialogueEnded += EnableInput;
     }
 
     private void Update()
