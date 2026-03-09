@@ -6,10 +6,11 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] private float m_spawnRadius;
     [SerializeField] private int m_itemSpawnCount;
+    [SerializeField] private InventoryController m_inventoryController;
+    public static event Action<float, float, float> OnSpecialItemCollected;
     public static int itemCount;
     public static event Action<float> OnConsumableCollected;
     public static event Action<float> OnQuestItemCollected;
-    public static event Action<float, float, float> OnSpecialItemCollected;
     private List<GameObject> m_items;
 
     private void Awake()
