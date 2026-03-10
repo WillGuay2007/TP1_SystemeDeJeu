@@ -16,6 +16,8 @@ public class HUDController : MonoBehaviour
     //EXP
     [SerializeField] private Slider m_experienceSlider;
     [SerializeField] private TMP_Text m_levelText;
+
+    [SerializeField] private Button m_interactButton;
     private void Awake()
     {
         //HUNGER
@@ -27,6 +29,10 @@ public class HUDController : MonoBehaviour
 
         //LEVEL AND EXPERIENCE
         ExperienceController.OnExperienceChanged += RedrawExperienceUI;
+
+        NpcController.OnNpcTriggerEnter += (entered) => m_interactButton.gameObject.SetActive(entered);
+        DialogueController.OnDialogueStarted += () => m_interactButton.gameObject.SetActive(false);
+        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
     }
 
     private void ReDrawHungerUI(float hungerFraction)

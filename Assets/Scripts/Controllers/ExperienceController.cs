@@ -29,10 +29,11 @@ public class ExperienceController : MonoBehaviour
     {
         OnExperienceChanged?.Invoke(m_fraction, CurrentLevel);
         ItemController.OnQuestItemCollected += AddExperience;
-        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => AddExperience(exp);
+        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => AddExperience(name, exp);
+        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
     }
 
-    private void AddExperience(float experience)
+    public void AddExperience(string name, float experience)
     {
         if (((CurrentExperience + experience) / m_amountOfExperienceForLvlUp) >= CurrentLevel + 1)
         {

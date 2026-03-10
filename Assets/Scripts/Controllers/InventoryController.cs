@@ -1,47 +1,98 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
+    private HashSet<string> m_questItems = new HashSet<string>();
 
-    [SerializeField] private PlayerInventory m_inventory;
+    private List<string> m_hungerItems = new List<string>();
+
+    private Dictionary<string, float> m_itemValues = new Dictionary<string, float>();
 
     private void Awake()
     {
-        //RESET A CHAQUE DEBUT DE JEU
-        m_inventory.NumberOfQuestItems = 0;
-        m_inventory.NumberOfSpecialItems = 0;
-        m_inventory.NumberOfConsumableItem = 0;
+        ItemController.OnQuestItemCollected += AddQuestItem;
+        ItemController.OnConsumableCollected += AddHungerItem;
 
-        ItemController.OnConsumableCollected += (float _) => AddConsumableItem();
-        ItemController.OnQuestItemCollected += (float _) => AddQuestItem();
-        ItemController.OnSpecialItemCollected += (float _, float _, float _) => AddSpecialItem();
         HealthController.OnDeath += PrintInventory;
+        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
     }
 
-    //TODO: make cleaner later
-    private void AddConsumableItem()
+    //Tu n'a pas mentionné les special items dans l'énoncé alors je l'ai pas fait pour l'inventaire
+
+    public bool CheckIfHasItem(string itemName)
     {
-        m_inventory.TotalItems++;
-        m_inventory.NumberOfConsumableItem++;
+        return m_itemValues.ContainsKey(itemName);
     }
 
-    private void AddQuestItem()
+    public HashSet<string> GetQuestItems()
     {
-        m_inventory.TotalItems++;
-        m_inventory.NumberOfQuestItems++;
+        return m_questItems;
     }
 
-    private void AddSpecialItem()
+    public float GetItemValue(string itemName)
     {
-        m_inventory.TotalItems++;
-        m_inventory.NumberOfSpecialItems++;
+        return m_itemValues[itemName];
+    }
+
+    public void ClearQuestItems()
+    {
+        m_questItems.Clear();
+    }
+
+    private void AddQuestItem(string name, float value)
+    {
+        m_questItems.Add(name);
+        m_itemValues[name] = value;
+    }
+
+    private void AddHungerItem(string name, float value)
+    {
+        m_hungerItems.Add(name);
+        m_itemValues[name] = value;
     }
 
     private void PrintInventory()
     {
-        print("Number of consumable items collected: " + m_inventory.NumberOfConsumableItem);
-        print("Number of quest items collected: " + m_inventory.NumberOfQuestItems);
-        print("Number of special items collected: " + m_inventory.NumberOfSpecialItems);
-        print("Number of total items: " + m_inventory.TotalItems);
+        print("=== QUEST ITEMS ===");
+
+        foreach (string item in m_questItems)
+        {
+            print(item);
+        }
+
+        print("=== HUNGER ITEMS ===");
+
+        foreach (string item in m_hungerItems)
+        {
+            print(item);
+        }
+
+        print("=== ITEM VALUES ===");
+
+        foreach (var pair in m_itemValues)
+        {
+            print(pair.Key + " -> " + pair.Value);
+        }
+
+        ConvertHungerItems();
+    }
+
+    private void ConvertHungerItems()
+    {
+        Dictionary<string, int> groupedItems = new Dictionary<string, int>();
+
+        foreach (var item in m_hungerItems)
+        {
+            if (!groupedItems.ContainsKey(item)) groupedItems[item] = 0;
+            groupedItems[item]++;
+        }
+
+        print("=== GROUPED HUNGER ITEMS ===");
+
+        foreach (var pair in groupedItems)
+        {
+            print(pair.Key + " : " + pair.Value);
+        }
     }
 }

@@ -9,6 +9,7 @@ public class HungerController : MonoBehaviour
     public static event Action<float> OnHungerChanged;
     public static event Action<bool> OnNewStarvationState;
     private bool m_isSprinting = false;
+    private bool m_isHungerGainEnabled = true;
 
     [SerializeField] private int m_maximumHunger;
     private float m_currentHunger;
@@ -27,14 +28,16 @@ public class HungerController : MonoBehaviour
     {
         OnHungerChanged?.Invoke(0); //Update le UI au start
         ItemController.OnConsumableCollected += ConsumeItem;
-        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => ConsumeItem(hunger);
+        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => ConsumeItem(name, hunger);
         PlayerInputController.OnSprintInputChanged += isSprinting => m_isSprinting = isSprinting;
+        HealthController.OnDeath += () => m_isHungerGainEnabled = false;
+        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
 
         CurrentHunger = 0;
         StartCoroutine(GainHunger());
     }
 
-    private void ConsumeItem(float hungerValue)
+    private void ConsumeItem(string name, float hungerValue)
     {
         if (CurrentHunger >= m_maximumHunger)
         {
@@ -47,14 +50,19 @@ public class HungerController : MonoBehaviour
 
     private IEnumerator GainHunger()
     {
-        while (true) {
-            if ((CurrentHunger + m_hungerIncrement >= m_maximumHunger) && (CurrentHunger < m_maximumHunger))
+        while (m_isHungerGainEnabled)
+        {
+            float increment = !m_isSprinting ? m_hungerIncrement : m_hungerIncrement * 2;
+
+            if ((CurrentHunger + increment >= m_maximumHunger) && (CurrentHunger < m_maximumHunger))
             {
                 print("[HUNGER CONTROLLER] -> Starvation begins");
                 OnNewStarvationState?.Invoke(true);
             }
-            CurrentHunger += !m_isSprinting ? m_hungerIncrement : m_hungerIncrement * 2;
+
+            CurrentHunger += increment;
             CurrentHunger = Mathf.Clamp(CurrentHunger, 0f, m_maximumHunger);
+
             yield return new WaitForSeconds(1f);
         }
     }

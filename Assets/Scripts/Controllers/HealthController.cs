@@ -26,15 +26,22 @@ public class HealthController : MonoBehaviour
     {
         CurrentHealth = m_maxHealth;
         HungerController.OnNewStarvationState += SetStarvation;
-        ItemController.OnSpecialItemCollected += (float dmg, float hunger, float exp) => Damage(dmg);
+        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => Damage(dmg);
         ExperienceController.OnLevelUp += IncrementMaxHP;
+        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
+    }
+
+    public void HealPercentage(float percent)
+    {
+        CurrentHealth += m_maxHealth * percent;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, m_maxHealth);
     }
 
     private void Damage(float damage)
     {
         if (CurrentHealth > 0 && CurrentHealth - damage <= 0f)
         {
-            print("[HEALTH CONTROLLER] -> Player died.");
+            print("[HEALTH CONTROLLER] -> Player died. Inputs disabled. Game ended.");
             OnDeath?.Invoke();
         }
         CurrentHealth -= damage;

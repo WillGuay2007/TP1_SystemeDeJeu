@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    [SerializeField] protected ItemController m_itemController;
+    [SerializeField] protected ItemController itemController;
+    [SerializeField] public string itemName;
     private bool m_isCollected;
 
     private void OnTriggerEnter(Collider collider)
@@ -18,6 +19,6 @@ public class Item : MonoBehaviour
     private void Collect()
     {
         m_isCollected = true;
-        m_itemController.CollectItem(this);
+        itemController.CollectItem(this);
     }
 }

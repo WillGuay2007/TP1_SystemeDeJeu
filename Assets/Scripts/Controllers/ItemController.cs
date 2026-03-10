@@ -4,40 +4,29 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    [SerializeField] private float m_spawnRadius;
-    [SerializeField] private int m_itemSpawnCount;
     [SerializeField] private InventoryController m_inventoryController;
-    public static event Action<float, float, float> OnSpecialItemCollected;
-    public static int itemCount;
-    public static event Action<float> OnConsumableCollected;
-    public static event Action<float> OnQuestItemCollected;
-    private List<GameObject> m_items;
-
-    private void Awake()
-    {
-        SpawnItems(m_spawnRadius, m_itemSpawnCount);
-    }
-
-    private void SpawnItems(float radius, int amount)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            itemCount++;
-        }
-    }
+    public static event Action<string, float, float, float> OnSpecialItemCollected;
+    public static event Action<string, float> OnConsumableCollected;
+    public static event Action<string, float> OnQuestItemCollected;
+    private List<Item> m_items;
 
     public void CollectItem(Item item)
     {
         if (item is ConsumableItem consumableItem)
         {
-            OnConsumableCollected?.Invoke(consumableItem.hungerAmount);
+            OnConsumableCollected?.Invoke(consumableItem.itemName, consumableItem.hungerAmount);
         }
         else if (item is QuestItem questItem) {
-            OnQuestItemCollected?.Invoke(questItem.experienceAmount);
+            OnQuestItemCollected?.Invoke(questItem.itemName, questItem.experienceAmount);
         }
         else if (item is SpecialItem specialItem)
         {
-            OnSpecialItemCollected?.Invoke(specialItem.damageAmount, specialItem.hungerAmount, specialItem.expAmount);
+            OnSpecialItemCollected?.Invoke(specialItem.itemName, specialItem.damageAmount, specialItem.hungerAmount, specialItem.expAmount);
         }
+    }
+
+    public void AddItem(Item item)
+    {
+        m_items.Add(item);
     }
 }

@@ -61,11 +61,11 @@ public class PlayerInAirState : PlayerState
         Vector3 currentVel = player.currentVelocity;
 
         Vector3 targetVel = new Vector3(
-            moveDir.x * playerData.movementVelocity,
+            moveDir.x * (!m_isSprinting ? playerData.movementVelocity : playerData.movementVelocity * m_sprintMultiplier),
             currentVel.y,
-            moveDir.z * playerData.movementVelocity
+            moveDir.z * (!m_isSprinting ? playerData.movementVelocity : playerData.movementVelocity * m_sprintMultiplier)
         );
 
-        player.SetVelocity(!m_isSprinting ? targetVel : targetVel * m_sprintMultiplier);
+        player.SetVelocity(targetVel);
     }
 }

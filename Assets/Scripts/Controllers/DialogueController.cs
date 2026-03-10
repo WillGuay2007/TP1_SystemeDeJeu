@@ -10,6 +10,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private GameObject m_dialogueBox;
     [SerializeField] private Button m_acceptButton;
     [SerializeField] private Button m_declineButton;
+    [SerializeField] private Button m_skipButton;
     [SerializeField] private float m_typewriterSpeed;
 
     private DialogueObject m_currentDialogueObject;
@@ -20,12 +21,11 @@ public class DialogueController : MonoBehaviour
 
     private Coroutine m_activeDialogue;
 
-    [SerializeField] private DialogueObject m_dialogueObject;
     private void Awake()
     {
         m_acceptButton.onClick.AddListener(OnAccepted);
         m_declineButton.onClick.AddListener(OnDenied);
-        ShowDialogue(m_dialogueObject);
+        m_skipButton.onClick.AddListener(OnSkip);
     }
 
     private void OnDestroy()
@@ -61,8 +61,8 @@ public class DialogueController : MonoBehaviour
         else
         {
             m_currentDialogueObject = data;
-            SetButtonTransparency(m_acceptButton, false, "Accept");
-            SetButtonTransparency(m_declineButton, false, "Decline");
+            SetButtonTransparency(m_acceptButton, false, "Yes");
+            SetButtonTransparency(m_declineButton, false, "No");
         }
     }
 
@@ -90,6 +90,11 @@ public class DialogueController : MonoBehaviour
         StartCoroutine(StartDialogue(m_currentDialogueObject.accepted, false));
     }
 
+    private void OnSkip()
+    {
+        CloseDialogue();
+    }
+
     private IEnumerator TypewriterEffect(string textToWrite)
     {
         m_textLabel.text = string.Empty;
@@ -109,6 +114,7 @@ public class DialogueController : MonoBehaviour
     private void CloseDialogue()
     {
         print("[DIALOGUE CONTROLLER] -> Dialogue ended");
+        StopAllCoroutines();
         OnDialogueEnded?.Invoke();
         m_currentDialogueObject = null;
         m_dialogueBox.SetActive(false);

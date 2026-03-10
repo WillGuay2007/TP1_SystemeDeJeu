@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1d13bc01bd60ed47aac3a34dd3c5a98, type: 3}
-  m_Name: DialogueTestA1
+  m_Name: RedNPC
   m_EditorClassIdentifier: 
   m_accepted: {fileID: 0}
   m_refused: {fileID: 0}
-  m_nodeContent: Thank you. Thank you.
+  m_nodeContent: Ok then. That' still good tho.

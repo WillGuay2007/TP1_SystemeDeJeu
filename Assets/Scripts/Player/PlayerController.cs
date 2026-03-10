@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-//C'EST PAS VRAIMENT UN CONTROLLER CELUI LA.
+//C'EST PAS VRAIMENT UN CONTROLLER CELUI LA, JE L'AI PRIS DE MON PROJET PRATIQUE. IGNORE LES PETITES ERREURES D'ARCHITECTURE
 public class PlayerController : MonoBehaviour
 {
     public Animator animator { get; private set; }
