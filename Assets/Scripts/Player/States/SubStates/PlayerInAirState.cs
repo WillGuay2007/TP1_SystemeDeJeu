@@ -11,7 +11,7 @@ public class PlayerInAirState : PlayerState
     private float m_sprintMultiplier = 1.5f;
     public PlayerInAirState(PlayerController playerController, PlayerStateMachine plrStateMachine, PlayerData plrData, string animBool) : base(playerController, plrStateMachine, plrData, animBool)
     {
-        PlayerInputController.OnSprintInputChanged += sprinting => m_isSprinting = sprinting;
+        player.inputManager.OnSprintInputChanged += sprinting => m_isSprinting = sprinting;
     }
 
     public override void DoChecks()

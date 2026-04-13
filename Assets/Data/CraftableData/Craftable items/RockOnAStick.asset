@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8d5ebe97f0c8143bec0c172604f679, type: 3}
+  m_Name: RockOnAStick
+  m_EditorClassIdentifier: 
+  m_itemType: 0
+  m_itemName: Rock on a stick
+  m_icon: {fileID: 21300000, guid: cbb293637b64d5445acbacd284c6e7e8, type: 3}
+  m_description: 
+  m_damageAmount: 0
+  m_expAmount: 0
+  m_hungerAmount: 0
+  m_itemColor: {r: 0.3962264, g: 0.38688144, b: 0.38688144, a: 0}

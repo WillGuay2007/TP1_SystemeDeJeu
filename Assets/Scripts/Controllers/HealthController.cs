@@ -5,10 +5,13 @@ using UnityEngine;
 public class HealthController : MonoBehaviour
 {
     [SerializeField] private float m_maxHealth;
-    public static event Action<float, float, float> OnTakeDamage;
-    public static event Action OnDeath;
-    public static event Action<float, float> OnHealthChanged;
+    public event Action<float, float, float> OnTakeDamage;
+    public event Action OnDeath;
+    public event Action<float, float> OnHealthChanged;
     private float m_currentHealth;
+    private HungerController m_hungerController;
+    private ItemController m_itemController;
+    private ExperienceController m_experienceController;
     public float CurrentHealth
     {
         get => m_currentHealth;
@@ -22,13 +25,25 @@ public class HealthController : MonoBehaviour
     private float m_starveDamage = 10f;
     private float m_levelUpHealthGain = 10f;
 
-    private void Awake()
+    public void SetDependencies(GameController gameController)
+    {
+        m_hungerController = gameController.hungerController;
+        m_itemController = gameController.itemController;
+        m_experienceController = gameController.experienceController;
+    }
+
+    public void Init()
     {
         CurrentHealth = m_maxHealth;
-        HungerController.OnNewStarvationState += SetStarvation;
-        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => Damage(dmg);
-        ExperienceController.OnLevelUp += IncrementMaxHP;
+        m_hungerController.OnNewStarvationState += SetStarvation;
+        m_itemController.OnPickupableCollected += (ItemSO item) => { if (item.damageAmount > 0) Damage(item.damageAmount); };
+        m_experienceController.OnLevelUp += IncrementMaxHP;
         //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
+    }
+
+    public void InternalStart()
+    {
+
     }
 
     public void HealPercentage(float percent)
@@ -41,7 +56,7 @@ public class HealthController : MonoBehaviour
     {
         if (CurrentHealth > 0 && CurrentHealth - damage <= 0f)
         {
-            print("[HEALTH CONTROLLER] -> Player died. Inputs disabled. Game ended.");
+            //print("[HEALTH CONTROLLER] -> Player died. Inputs disabled. Game ended.");
             OnDeath?.Invoke();
         }
         CurrentHealth -= damage;

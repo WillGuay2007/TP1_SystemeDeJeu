@@ -1,17 +1,7 @@
 using UnityEngine;
 
-public class NPC : MonoBehaviour
+public abstract class NPC : MonoBehaviour
 {
-    public enum NpcType
-    {
-        Normal,
-        Red,
-        White,
-        Black
-    }
-
-    [SerializeField] public NpcType npcType;
-    [SerializeField] public DialogueObject m_dialogueObject;
 
     [SerializeField] private NpcController m_npcController;
 
@@ -30,4 +20,6 @@ public class NPC : MonoBehaviour
             m_npcController.ExitNpc(this);
         }
     }
+
+    public abstract void Interact();
 }

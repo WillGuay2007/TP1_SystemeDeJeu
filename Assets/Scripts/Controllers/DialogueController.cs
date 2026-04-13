@@ -15,17 +15,27 @@ public class DialogueController : MonoBehaviour
 
     private DialogueObject m_currentDialogueObject;
 
-    public static event Action OnDialogueStarted;
-    public static event Action OnDialogueEnded;
+    public event Action OnDialogueStarted;
+    public event Action OnDialogueEnded;
 
 
     private Coroutine m_activeDialogue;
 
-    private void Awake()
+    public void SetDependencies(GameController gameController)
+    {
+        //Here in case a dependency get added!
+    }
+
+    public void Init()
     {
         m_acceptButton.onClick.AddListener(OnAccepted);
         m_declineButton.onClick.AddListener(OnDenied);
         m_skipButton.onClick.AddListener(OnSkip);
+    }
+
+    public void InternalStart()
+    {
+
     }
 
     private void OnDestroy()
@@ -43,7 +53,7 @@ public class DialogueController : MonoBehaviour
     private IEnumerator StartDialogue(DialogueObject data, bool isFirstCall)
     {
         if (isFirstCall) {
-            print("[DIALOGUE CONTROLLER] -> Dialogue started");
+            //print("[DIALOGUE CONTROLLER] -> Dialogue started");
             OnDialogueStarted?.Invoke();
         }
         m_dialogueBox.SetActive(true);
@@ -113,7 +123,7 @@ public class DialogueController : MonoBehaviour
 
     private void CloseDialogue()
     {
-        print("[DIALOGUE CONTROLLER] -> Dialogue ended");
+        //print("[DIALOGUE CONTROLLER] -> Dialogue ended");
         StopAllCoroutines();
         OnDialogueEnded?.Invoke();
         m_currentDialogueObject = null;

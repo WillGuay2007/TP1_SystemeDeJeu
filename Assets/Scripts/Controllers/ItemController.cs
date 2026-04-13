@@ -4,29 +4,48 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    [SerializeField] private InventoryController m_inventoryController;
-    public static event Action<string, float, float, float> OnSpecialItemCollected;
-    public static event Action<string, float> OnConsumableCollected;
-    public static event Action<string, float> OnQuestItemCollected;
-    private List<Item> m_items;
+    [SerializeField] private ItemDrop m_itemDropPrefab;
+    public event Action<ItemSO> OnConsumableCollected;
+    public event Action<ItemSO> OnPickupableCollected;
+    private InventoryController m_inventoryController;
 
-    public void CollectItem(Item item)
+    public void SetDependencies(GameController gameController)
     {
-        if (item is ConsumableItem consumableItem)
+        m_inventoryController = gameController.inventoryController;
+    }
+
+    public void Init()
+    {
+        foreach (ItemDrop drop in FindObjectsByType<ItemDrop>(FindObjectsSortMode.None))
         {
-            OnConsumableCollected?.Invoke(consumableItem.itemName, consumableItem.hungerAmount);
-        }
-        else if (item is QuestItem questItem) {
-            OnQuestItemCollected?.Invoke(questItem.itemName, questItem.experienceAmount);
-        }
-        else if (item is SpecialItem specialItem)
-        {
-            OnSpecialItemCollected?.Invoke(specialItem.itemName, specialItem.damageAmount, specialItem.hungerAmount, specialItem.expAmount);
+            drop.Init(this);
         }
     }
 
-    public void AddItem(Item item)
+    public void InternalStart()
     {
-        m_items.Add(item);
+
+    }
+
+    public void CollectItem(ItemSO item)
+    {
+        if (item.itemType == ItemSO.ItemType.Inventory)
+        {
+            OnPickupableCollected?.Invoke(item);
+            AudioManager.Instance.PlaySound(AudioManager.Sounds.PickItem);
+        }
+        else if (item.itemType == ItemSO.ItemType.Consumable)
+        {
+            OnConsumableCollected?.Invoke(item);
+            AudioManager.Instance.PlaySound(AudioManager.Sounds.ConsumeItem);
+        }
+    }
+
+    public ItemDrop SpawnItem(ItemSO item, Vector3 position)
+    {
+        ItemDrop itemDrop = Instantiate(m_itemDropPrefab, position, Quaternion.identity);
+        itemDrop.SetSO(item);
+        itemDrop.Init(this);
+        return itemDrop;
     }
 }

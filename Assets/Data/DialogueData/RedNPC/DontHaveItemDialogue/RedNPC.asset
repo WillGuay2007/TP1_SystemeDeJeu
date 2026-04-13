@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_accepted: {fileID: 0}
   m_refused: {fileID: 0}
-  m_nodeContent: You are not worthy. Find Exp_Variation1 to talk to me.
+  m_nodeContent: You are not worthy. Find the dragon's eye to talk to me.

@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class HungerController : MonoBehaviour
 {
 
-    public static event Action<float> OnHungerChanged;
-    public static event Action<bool> OnNewStarvationState;
+    public event Action<float> OnHungerChanged;
+    public event Action<bool> OnNewStarvationState;
+    private ItemController m_itemController;
+    private HealthController m_healthController;
+    private PlayerInputController m_playerInputController;
     private bool m_isSprinting = false;
     private bool m_isHungerGainEnabled = true;
 
@@ -24,27 +27,38 @@ public class HungerController : MonoBehaviour
     }
     private float m_hungerIncrement { get { return m_maximumHunger * 0.01f; } }
 
-    private void Awake()
+    public void SetDependencies(GameController gameController)
+    {
+        m_itemController = gameController.itemController;
+        m_healthController = gameController.healthController;
+        m_playerInputController = gameController.playerInputController;
+    }
+
+    public void Init()
     {
         OnHungerChanged?.Invoke(0); //Update le UI au start
-        ItemController.OnConsumableCollected += ConsumeItem;
-        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => ConsumeItem(name, hunger);
-        PlayerInputController.OnSprintInputChanged += isSprinting => m_isSprinting = isSprinting;
-        HealthController.OnDeath += () => m_isHungerGainEnabled = false;
+        m_itemController.OnConsumableCollected += (ItemSO item) => ConsumeItem(item.hungerAmount);
+        m_playerInputController.OnSprintInputChanged += isSprinting => m_isSprinting = isSprinting;
+        m_healthController.OnDeath += () => m_isHungerGainEnabled = false;
         //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
 
         CurrentHunger = 0;
+    }
+
+    public void InternalStart()
+    {
         StartCoroutine(GainHunger());
     }
 
-    private void ConsumeItem(string name, float hungerValue)
+    private void ConsumeItem(float hungerAmount)
     {
+        if (hungerAmount <= 0) return;
         if (CurrentHunger >= m_maximumHunger)
         {
-            print("[HUNGER CONTROLLER] -> Starvation ends");
+            //print("[HUNGER CONTROLLER] -> Starvation ends");
             OnNewStarvationState?.Invoke(false);
         }
-        CurrentHunger -= hungerValue;
+        CurrentHunger -= hungerAmount;
         CurrentHunger = Mathf.Clamp(CurrentHunger, 0, m_maximumHunger);
     }
 
@@ -56,7 +70,7 @@ public class HungerController : MonoBehaviour
 
             if ((CurrentHunger + increment >= m_maximumHunger) && (CurrentHunger < m_maximumHunger))
             {
-                print("[HUNGER CONTROLLER] -> Starvation begins");
+                //print("[HUNGER CONTROLLER] -> Starvation begins");
                 OnNewStarvationState?.Invoke(true);
             }
 

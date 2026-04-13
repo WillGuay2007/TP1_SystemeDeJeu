@@ -11,10 +11,23 @@ public class CameraController : MonoBehaviour
     private float m_cameraDistanceOffset;
     private float m_sprintingOffset = 0f;
 
-    private void Awake()
+    private PlayerInputController m_playerInputController;
+
+    public void SetDependencies(GameController gameController)
     {
-        PlayerInputController.OnSprintInputChanged += sprinting => m_sprintingOffset = sprinting ? -0.5f : 0f; ;
+        m_playerInputController = gameController.playerInputController;
     }
+
+    public void Init()
+    {
+        m_playerInputController.OnSprintInputChanged += sprinting => m_sprintingOffset = sprinting ? -0.5f : 0f; ;
+    }
+
+    public void InternalStart()
+    {
+
+    }
+
     void Update()
     {
         m_cameraDistanceOffset += Input.GetAxis("Mouse ScrollWheel");

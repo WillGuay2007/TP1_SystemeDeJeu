@@ -5,9 +5,10 @@ public class ExperienceController : MonoBehaviour
 {
     [SerializeField] private float m_amountOfExperienceForLvlUp = 100f;
 
-    public static event Action<float, int> OnExperienceChanged;
-    public static event Action<int> OnLevelUp;
+    public event Action<float, int> OnExperienceChanged;
+    public event Action<int> OnLevelUp;
 
+    private ItemController m_itemController;
 
     private float m_currentExperience = 0f;
     private float m_fraction => (m_currentExperience % m_amountOfExperienceForLvlUp) / m_amountOfExperienceForLvlUp;
@@ -22,23 +23,30 @@ public class ExperienceController : MonoBehaviour
             OnExperienceChanged?.Invoke(m_fraction, CurrentLevel);
         }
     }
-
-    public int CurrentLevel => Mathf.FloorToInt(m_currentExperience / m_amountOfExperienceForLvlUp);
-
-    private void Awake()
+    public void SetDependencies(GameController gameController)
     {
-        OnExperienceChanged?.Invoke(m_fraction, CurrentLevel);
-        ItemController.OnQuestItemCollected += AddExperience;
-        ItemController.OnSpecialItemCollected += (string name, float dmg, float hunger, float exp) => AddExperience(name, exp);
+        m_itemController = gameController.itemController;
+    }
+
+    public void Init()
+    {
+        m_itemController.OnConsumableCollected += (ItemSO item) => AddExperience(item.expAmount); //Si c'est un pickupable, le npc va donner le exp.
         //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
     }
 
-    public void AddExperience(string name, float experience)
+    public void InternalStart()
     {
-        if (((CurrentExperience + experience) / m_amountOfExperienceForLvlUp) >= CurrentLevel + 1)
+        OnExperienceChanged?.Invoke(m_fraction, CurrentLevel);
+    }
+
+    public int CurrentLevel => Mathf.FloorToInt(m_currentExperience / m_amountOfExperienceForLvlUp);
+
+    public void AddExperience(float experienceAmount)
+    {
+        if (((CurrentExperience + experienceAmount) / m_amountOfExperienceForLvlUp) >= CurrentLevel + 1)
         {
             OnLevelUp?.Invoke(CurrentLevel);
         }
-        CurrentExperience += experience;
+        CurrentExperience += experienceAmount;
     }
 }

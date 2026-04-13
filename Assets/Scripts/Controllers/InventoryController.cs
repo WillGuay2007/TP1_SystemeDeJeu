@@ -1,98 +1,75 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
-    private HashSet<string> m_questItems = new HashSet<string>();
 
-    private List<string> m_hungerItems = new List<string>();
+    [SerializeField] private InventoryWindow m_inventoryWindow;
 
-    private Dictionary<string, float> m_itemValues = new Dictionary<string, float>();
+    private HashSet<ItemSO> m_items = new HashSet<ItemSO>();
 
-    private void Awake()
+    private Dictionary<ItemSO, InventorySlot> m_slots = new();
+
+    private ItemController m_itemController;
+    private SlotController m_slotController;
+
+    public void SetDependencies(GameController gameController)
     {
-        ItemController.OnQuestItemCollected += AddQuestItem;
-        ItemController.OnConsumableCollected += AddHungerItem;
-
-        HealthController.OnDeath += PrintInventory;
-        //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
+        m_itemController = gameController.itemController;
+        m_slotController = gameController.slotController;
     }
 
-    //Tu n'a pas mentionné les special items dans l'énoncé alors je l'ai pas fait pour l'inventaire
-
-    public bool CheckIfHasItem(string itemName)
+    public void Init()
     {
-        return m_itemValues.ContainsKey(itemName);
+        m_itemController.OnPickupableCollected += AddInventoryItem;
+        HUDControllerV2.Instance.OpenWindow(m_inventoryWindow);
     }
 
-    public HashSet<string> GetQuestItems()
+    public void InternalStart()
     {
-        return m_questItems;
+
     }
 
-    public float GetItemValue(string itemName)
+    public bool CheckIfHasItem(ItemSO item)
     {
-        return m_itemValues[itemName];
+        return m_slots.ContainsKey(item);
     }
 
-    public void ClearQuestItems()
+    public HashSet<ItemSO> GetItems() => m_items;
+    public float GetItemExpValue(ItemSO item) => item.expAmount;
+    public void ClearExpItems()
     {
-        m_questItems.Clear();
-    }
-
-    private void AddQuestItem(string name, float value)
-    {
-        m_questItems.Add(name);
-        m_itemValues[name] = value;
-    }
-
-    private void AddHungerItem(string name, float value)
-    {
-        m_hungerItems.Add(name);
-        m_itemValues[name] = value;
-    }
-
-    private void PrintInventory()
-    {
-        print("=== QUEST ITEMS ===");
-
-        foreach (string item in m_questItems)
+        foreach (ItemSO item in m_items.Where(i => i.expAmount > 0).ToList())
         {
-            print(item);
+            Destroy(m_slots[item].gameObject);
+            m_slots.Remove(item);
         }
-
-        print("=== HUNGER ITEMS ===");
-
-        foreach (string item in m_hungerItems)
-        {
-            print(item);
-        }
-
-        print("=== ITEM VALUES ===");
-
-        foreach (var pair in m_itemValues)
-        {
-            print(pair.Key + " -> " + pair.Value);
-        }
-
-        ConvertHungerItems();
+        m_items.RemoveWhere(item => item.expAmount > 0);
     }
 
-    private void ConvertHungerItems()
+    private void RemoveKey(ItemSO item)
     {
-        Dictionary<string, int> groupedItems = new Dictionary<string, int>();
+        m_items.Remove(item);
+        m_slots.Remove(item);
+    }
 
-        foreach (var item in m_hungerItems)
+    private void AddInventoryItem(ItemSO item)
+    {
+        if (item.itemType != ItemSO.ItemType.Inventory) return;
+        m_items.Add(item);
+
+        if (m_slots.ContainsKey(item))
         {
-            if (!groupedItems.ContainsKey(item)) groupedItems[item] = 0;
-            groupedItems[item]++;
-        }
-
-        print("=== GROUPED HUNGER ITEMS ===");
-
-        foreach (var pair in groupedItems)
+            m_slots[item].AddQuantity(1);
+        } else
         {
-            print(pair.Key + " : " + pair.Value);
+            InventorySlot slot = m_inventoryWindow.CreateSlot();
+            slot.Init(m_slotController);
+            slot.SetQuantity(1);
+            slot.SetItem(item);
+            slot.SlotDestroyed += RemoveKey;
+            m_slots.Add(item, slot);
         }
     }
 }

@@ -18,21 +18,42 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TMP_Text m_levelText;
 
     [SerializeField] private Button m_interactButton;
-    private void Awake()
+
+    private HungerController m_hungerController;
+    private HealthController m_healthController;
+    private ExperienceController m_experienceController;
+    private NpcController m_npcController;
+    private DialogueController m_dialogueController;
+
+    public void SetDependencies(GameController gameController)
+    {
+        m_hungerController = gameController.hungerController;
+        m_healthController = gameController.healthController;
+        m_experienceController = gameController.experienceController;
+        m_npcController = gameController.npcController;
+        m_dialogueController = gameController.dialogueController;
+    }
+
+    public void Init()
     {
         //HUNGER
         m_sliderForeground = m_hungerSlider.transform.Find("Fill Area/Fill");
-        HungerController.OnHungerChanged += ReDrawHungerUI;
+        m_hungerController.OnHungerChanged += ReDrawHungerUI;
 
         //HEALTH
-        HealthController.OnHealthChanged += RedrawHealthUI;
+        m_healthController.OnHealthChanged += RedrawHealthUI;
 
         //LEVEL AND EXPERIENCE
-        ExperienceController.OnExperienceChanged += RedrawExperienceUI;
+        m_experienceController.OnExperienceChanged += RedrawExperienceUI;
 
-        NpcController.OnNpcTriggerEnter += (entered) => m_interactButton.gameObject.SetActive(entered);
-        DialogueController.OnDialogueStarted += () => m_interactButton.gameObject.SetActive(false);
+        m_npcController.OnNpcTriggerEnter += (entered) => m_interactButton.gameObject.SetActive(entered);
+        m_dialogueController.OnDialogueStarted += () => m_interactButton.gameObject.SetActive(false);
         //LA RAISON POURQUOI ON LES UNSUBSCRIBE PAS C'EST PARCE QUE LES CONTROLLERS NE SERONT JAMAIS DÉTRUIT. CA SERAIT INUTILE.
+    }
+
+    public void InternalStart()
+    {
+
     }
 
     private void ReDrawHungerUI(float hungerFraction)
