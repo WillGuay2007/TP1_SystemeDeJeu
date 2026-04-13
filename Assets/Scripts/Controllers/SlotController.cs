@@ -44,7 +44,8 @@ public class SlotController : MonoBehaviour
             }
             else
             {
-                //print("Cannot put item in slot. Slot is invalid for this type of item.");
+                //Je le garde volontairement.
+                print("Slot cannot accept item");
                 return;
             }
         }

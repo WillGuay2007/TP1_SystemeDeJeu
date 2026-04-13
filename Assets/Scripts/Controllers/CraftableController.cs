@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class CraftableController : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class CraftableController : MonoBehaviour
 
     [SerializeField] private List<CraftRecipe> m_possibleRecipes = new List<CraftRecipe>();
     [SerializeField] private CraftingWindow m_craftingWindow;
-    [SerializeField] private CraftingStationWindow m_craftingStationWindow;
+    public event Action CraftCompleted;
     private ItemController m_itemController;
     private PlayerInputController m_playerInputController;
     private Coroutine m_craftingCoroutine = null;
@@ -83,7 +84,7 @@ public class CraftableController : MonoBehaviour
                 m_itemController.SpawnItem(recipeToFollow.result, spawnPosition);
                 AudioManager.Instance.PlaySound(AudioManager.Sounds.ItemCrafted);
                 HUDControllerV2.Instance.CloseWindow(m_craftingWindow);
-                m_craftingStationWindow.ResetSlots(); //TODO: ENLEVER LA LOGIQUE DE CRAFTING STATION WINDOW ET LA METTRE DANS CRAFTING STATION
+                CraftCompleted?.Invoke();
                 m_craftingCoroutine = null;
 
                 yield break;

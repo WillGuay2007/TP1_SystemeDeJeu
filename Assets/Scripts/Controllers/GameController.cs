@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour
         InternalStartControllers();
     }
 
+    //J'appelle les 3 étapes de chacuns des controllers meme si certains sont pas implémentés car dans le future, il pourrait y'avoir des changements
+
     private void SetControllerDependencies()
     {
         cameraController.SetDependencies(this);

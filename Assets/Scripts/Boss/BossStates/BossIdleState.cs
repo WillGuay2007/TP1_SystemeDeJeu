@@ -2,22 +2,33 @@ using UnityEngine;
 
 public class BossIdleState : BossState
 {
-    public BossIdleState(BossStateMachine _stateMachine) : base(_stateMachine)
+    private const float MINIMUM_IDLE_DELAY = 2f;
+    private const float MAXIMUM_IDLE_DELAY = 5f;
+    private float idleDelay;
+    private float idleTimer;
+
+    public BossIdleState(BossStateMachine _stateMachine, string _animBool) : base(_stateMachine, _animBool)
     {
     }
 
     public override void OnEnter()
     {
-        stateMachine.bossAnimator.SetBool("Idling", true);
+        base.OnEnter();
+        idleDelay = Random.Range(MINIMUM_IDLE_DELAY, MAXIMUM_IDLE_DELAY);
     }
 
     public override void OnExit()
     {
-        stateMachine.bossAnimator.SetBool("Idling", false);
+        base.OnExit();
+        idleTimer = 0f;
     }
 
     public override void OnUpdate()
     {
-
+        idleTimer += Time.deltaTime;
+        if (idleTimer >= idleDelay)
+        {
+            stateMachine.ChangeState(typeof(BossPatrolState));
+        }
     }
 }

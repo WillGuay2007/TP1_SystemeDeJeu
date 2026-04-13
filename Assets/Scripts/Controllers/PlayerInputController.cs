@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 
+//Ca date du vieux tp dont je touche pas
 public class PlayerInputController : MonoBehaviour
 {
     public Vector2 RawMovementInput {  get; private set; }

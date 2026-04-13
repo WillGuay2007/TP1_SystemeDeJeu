@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class BossStateMachine : MonoBehaviour
 {
+
+    private const float PLAYER_DETECTION_RANGE = 20f;
+
     public BossState currentState { get; private set; }
     public BossState previousState { get; private set; }
-    [SerializeField] public Animator bossAnimator;
+    public Boss boss;
 
     private Dictionary<Type, BossState> m_stateDictionary = new Dictionary<Type, BossState>();
 
@@ -15,7 +18,7 @@ public class BossStateMachine : MonoBehaviour
     {
         if (newState != null && newState == (currentState?.GetType()))
         {
-            print("Could not change state: Already in state " + newState); //Tu a dis de enlever les print mais je crois que celui la est utile
+            //print("Could not change state: Already in state " + newState);
             return;
         }
         if (currentState != null)
@@ -24,7 +27,7 @@ public class BossStateMachine : MonoBehaviour
             previousState = currentState;
         }
 
-        print("The boss went from state" + currentState?.GetType().Name + " to state " + newState);
+        print("The boss went from state " + currentState?.GetType().Name + " to state " + newState);
 
         currentState = m_stateDictionary[newState];
         currentState.OnEnter();
@@ -33,7 +36,8 @@ public class BossStateMachine : MonoBehaviour
 
     public void Init()
     {
-        m_stateDictionary.Add(typeof(BossIdleState), new BossIdleState(this));
+        m_stateDictionary.Add(typeof(BossIdleState), new BossIdleState(this, "Idling"));
+        m_stateDictionary.Add(typeof(BossPatrolState), new BossPatrolState(this, "Walking"));
     }
 
     private void Update()

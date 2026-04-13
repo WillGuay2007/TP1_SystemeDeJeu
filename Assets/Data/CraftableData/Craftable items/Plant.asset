@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b8d5ebe97f0c8143bec0c172604f679, type: 3}
-  m_Name: Leaf
+  m_Name: Plant
   m_EditorClassIdentifier: 
   m_itemType: 0
-  m_itemName: Leaf
-  m_icon: {fileID: 21300000, guid: 5aa2f4fc0c5683342b0efc922913fb6a, type: 3}
+  m_itemName: Plant
+  m_icon: {fileID: 21300000, guid: a143e5a4b223c61469f0f92dbcbd5305, type: 3}
   m_description: 
   m_damageAmount: 0
   m_expAmount: 0
   m_hungerAmount: 0
-  m_itemColor: {r: 0.11826395, g: 0.6037736, b: 0.054111768, a: 0}
+  m_itemColor: {r: 0.26045716, g: 0.8490566, b: 0.13216448, a: 0}

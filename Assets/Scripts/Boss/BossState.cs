@@ -1,17 +1,27 @@
 using UnityEngine;
 
-public abstract class BossState
+public class BossState
 {
-    protected readonly BossStateMachine stateMachine;
+    protected BossStateMachine stateMachine;
+    protected Boss boss;
+    private string m_animBool;
 
-    public BossState(BossStateMachine _stateMachine)
+    public BossState(BossStateMachine _stateMachine, string _animBool)
     {
+        boss = _stateMachine.boss;
         stateMachine = _stateMachine;
+        m_animBool = _animBool;
     }
 
-    public abstract void OnEnter();
+    public virtual void OnEnter()
+    {
+        boss.Animator.SetBool(m_animBool, true);
+    }
 
-    public abstract void OnExit();
+    public virtual void OnExit()
+    {
+        boss.Animator.SetBool(m_animBool, false);
+    }
 
-    public abstract void OnUpdate();
+    public virtual void OnUpdate() { }
 }

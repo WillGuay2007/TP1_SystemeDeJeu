@@ -23,12 +23,11 @@ public class InventoryController : MonoBehaviour
     public void Init()
     {
         m_itemController.OnPickupableCollected += AddInventoryItem;
-        HUDControllerV2.Instance.OpenWindow(m_inventoryWindow);
     }
 
     public void InternalStart()
     {
-
+        HUDControllerV2.Instance.OpenWindow(m_inventoryWindow);
     }
 
     public bool CheckIfHasItem(ItemSO item)
@@ -54,7 +53,7 @@ public class InventoryController : MonoBehaviour
         m_slots.Remove(item);
     }
 
-    private void AddInventoryItem(ItemSO item)
+    public void AddInventoryItem(ItemSO item)
     {
         if (item.itemType != ItemSO.ItemType.Inventory) return;
         m_items.Add(item);
