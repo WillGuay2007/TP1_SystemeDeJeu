@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     public PlayerInputController playerInputController => m_playerInputController;
     public SlotController slotController => m_slotController;
 
-    private void Awake()
+    private void Start()
     {
         SetControllerDependencies();
         InitControllers();

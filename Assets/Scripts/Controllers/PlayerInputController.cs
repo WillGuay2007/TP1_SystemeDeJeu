@@ -2,13 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//Ca date du vieux tp dont je touche pas
+//LA PLUPART DATE DU VIEUX TP DONC SI C'EST MAL FAIT C'EST NORMAL
 public class PlayerInputController : MonoBehaviour
 {
     public Vector2 RawMovementInput {  get; private set; }
-    public Vector2 SmoothMovementInput { get; private set; }
     public event Action<bool> OnSprintInputChanged;
     public event Action OnMoveInput;
+    public event Action OnOpenRecipesInput;
+    public event Action OnOpenAudioSettingsInput;
     public float inputX { get; private set; }
     public float inputY { get; private set; }
     public float smoothInputX { get; private set; }
@@ -46,6 +47,9 @@ public class PlayerInputController : MonoBehaviour
         CheckJumpInputHoldTime();
         SmoothenMovement();
     }
+
+    public void OnRecipesWindowOpen() => OnOpenRecipesInput?.Invoke();
+    public void OnOpenAudioSettings() => OnOpenAudioSettingsInput?.Invoke();
 
     public void OnMove(InputAction.CallbackContext context)
     {

@@ -991,6 +991,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Custom",
+            "id": "a320e80e-f934-4fe7-a4aa-c88b284b6eaa",
+            "actions": [
+                {
+                    "name": "OpenRecipes",
+                    "type": "Button",
+                    "id": "c5d43190-81ba-4a88-b42f-ae4ced45e505",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenVolumeSettings",
+                    "type": "Button",
+                    "id": "4698be00-70f9-4e76-a0fa-bcf41126ca71",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "889b01b0-2073-4304-9d3c-de9144dfcb86",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenRecipes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08d79caf-cd2a-4910-8e37-f88f5763c345",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenVolumeSettings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

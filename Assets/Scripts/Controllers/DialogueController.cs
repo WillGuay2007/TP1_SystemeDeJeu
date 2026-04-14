@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+//CA DATE DU TP1, CORRIGE PAS.
 public class DialogueController : MonoBehaviour
 {
     [SerializeField] private TMP_Text m_textLabel;

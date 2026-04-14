@@ -26,6 +26,13 @@ public class BossIdleState : BossState
     public override void OnUpdate()
     {
         idleTimer += Time.deltaTime;
+
+        if (boss.CheckIfPlayerInRange(Boss.DETECTION_RANGE))
+        {
+            stateMachine.ChangeState(typeof(BossPursuitState));
+            return;
+        }
+
         if (idleTimer >= idleDelay)
         {
             stateMachine.ChangeState(typeof(BossPatrolState));

@@ -4,15 +4,7 @@ using UnityEngine;
 //Je l'ai changé pour mieux me retrouver mais l'idée reste la meme (Héritage + windows + open close principle)
 public class HUDControllerV2 : MonoBehaviour
 {
-    private static HUDControllerV2 _instance;
-
-    public static HUDControllerV2 Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
+    public static HUDControllerV2 Instance { get; private set; }
 
     public void OpenWindow(Window window) => window.Show();
 
@@ -20,7 +12,14 @@ public class HUDControllerV2 : MonoBehaviour
 
     private void Awake()
     {
-        _instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 }
 

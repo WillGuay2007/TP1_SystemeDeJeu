@@ -14,6 +14,7 @@ public class WhiteNPC : NPC
 
         m_inventoryController.ClearExpItems();
 
-        print("All quest items exchanged for experience");
+        //Print volontaire
+        //print("All quest items exchanged for experience");
     }
 }

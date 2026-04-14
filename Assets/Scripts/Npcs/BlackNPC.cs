@@ -12,11 +12,11 @@ public class BlackNPC : NPC
             m_healthController.HealPercentage(0.25f);
             m_lastHealTime = Time.time;
 
-            print("Player healed for 25%");
+            //print("Player healed for 25%");
         }
         else
         {
-            print("Heal on cooldown");
+            //print("Heal on cooldown");
         }
     }
 }

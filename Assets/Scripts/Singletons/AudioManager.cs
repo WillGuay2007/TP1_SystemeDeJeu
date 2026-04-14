@@ -12,7 +12,11 @@ public class AudioManager : MonoBehaviour
         PlayerJump,
         PickItem,
         ConsumeItem,
-        ItemCrafted
+        ItemCrafted,
+        StartedCraft,
+        DropItemInSlot,
+        CraftInterrupted,
+        BossAttack
     }
 
     [System.Serializable]
@@ -48,7 +52,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -66,7 +70,7 @@ public class AudioManager : MonoBehaviour
         PlayDefaultMusic();
     }
 
-    public void PlaySound(Sounds sound)
+    public void PlayAudio(Sounds sound)
     {
         if (m_sounds.ContainsKey(sound))
         {
@@ -86,7 +90,7 @@ public class AudioManager : MonoBehaviour
         m_musicVolume = volume;
     }
 
-    public void SetSoundVolume(float volume)
+    public void SetSFXVolume(float volume)
     {
         m_soundSource.volume = volume;
     }
@@ -135,5 +139,6 @@ public class AudioManager : MonoBehaviour
             m_musicSource2.volume = 0f;
             m_isMusicSource1Active = true;
         }
+        m_crossFadeCoroutine = null;
     }
 }

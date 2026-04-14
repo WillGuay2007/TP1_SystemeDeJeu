@@ -3,20 +3,23 @@ using UnityEngine.AI;
 
 public class Boss : MonoBehaviour
 {
+    public const float DETECTION_RANGE = 20f;
     public BossStateMachine m_stateMachine;
     public Animator Animator;
     public NavMeshAgent Agent;
     public GameObject[] PatrolPoints;
     public PlayerController playerTarget;
+    public Vector3 startPosition;
     private int m_currentPatrolIndex = 0;
 
     private void Awake()
     {
+        startPosition = transform.position;
         m_stateMachine.Init();
         m_stateMachine.ChangeState(typeof(BossIdleState));
     }
 
-    private bool CheckIfPlayerInRange(float range)
+    public bool CheckIfPlayerInRange(float range)
     {
         return Vector3.Distance(transform.position, playerTarget.transform.position) <= range;
     }

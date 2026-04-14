@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public PlayerInputController inputManager => m_inputManager;
     public Rigidbody rigidBody { get; private set; }
     public Vector3 currentVelocity => rigidBody.linearVelocity;
-    public bool isGrounded { get; private set; }
     [SerializeField] private Transform groundCheckTransform;
     [SerializeField] private PlayerData playerData;
 

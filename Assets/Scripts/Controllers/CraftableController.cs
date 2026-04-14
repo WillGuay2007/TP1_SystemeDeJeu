@@ -10,6 +10,7 @@ public class CraftableController : MonoBehaviour
 
     [SerializeField] private List<CraftRecipe> m_possibleRecipes = new List<CraftRecipe>();
     [SerializeField] private CraftingWindow m_craftingWindow;
+    [SerializeField] private RecipeWindow m_recipeWindow;
     public event Action CraftCompleted;
     private ItemController m_itemController;
     private PlayerInputController m_playerInputController;
@@ -23,7 +24,15 @@ public class CraftableController : MonoBehaviour
 
     public void Init()
     {
+        m_recipeWindow.Init(m_possibleRecipes);
         m_playerInputController.OnMoveInput += InterruptCrafting;
+        m_playerInputController.OnOpenRecipesInput += () =>
+        {
+            if (m_recipeWindow.gameObject.activeSelf)
+                HUDControllerV2.Instance.CloseWindow(m_recipeWindow);
+            else
+                HUDControllerV2.Instance.OpenWindow(m_recipeWindow);
+        };
     }
 
     public void InternalStart()
@@ -37,6 +46,7 @@ public class CraftableController : MonoBehaviour
         m_craftingCoroutine = null;
         if (m_craftingWindow.gameObject.activeSelf)
         {
+            AudioManager.Instance.PlayAudio(AudioManager.Sounds.CraftInterrupted);
             HUDControllerV2.Instance.CloseWindow(m_craftingWindow);
         }
     }
@@ -73,6 +83,7 @@ public class CraftableController : MonoBehaviour
         float elapsedTime = 0f;
         float craftTime = recipeToFollow.craftingTime;
         float progressFraction = 0f;
+        AudioManager.Instance.PlayAudio(AudioManager.Sounds.StartedCraft);
         while (true)
         {
             elapsedTime += Time.deltaTime;
@@ -82,7 +93,7 @@ public class CraftableController : MonoBehaviour
             if (elapsedTime >= craftTime)
             {
                 m_itemController.SpawnItem(recipeToFollow.result, spawnPosition);
-                AudioManager.Instance.PlaySound(AudioManager.Sounds.ItemCrafted);
+                AudioManager.Instance.PlayAudio(AudioManager.Sounds.ItemCrafted);
                 HUDControllerV2.Instance.CloseWindow(m_craftingWindow);
                 CraftCompleted?.Invoke();
                 m_craftingCoroutine = null;

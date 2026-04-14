@@ -36,6 +36,7 @@ public class SlotController : MonoBehaviour
             ItemSO item = m_lastSlotSelected.GetItem();
             if (slot.CanAcceptItem(item))
             {
+                AudioManager.Instance.PlayAudio(AudioManager.Sounds.DropItemInSlot);
                 m_lastSlotSelected.TakeOne();
                 slot.SetItem(item);
                 m_lastSlotSelected.SetHighlight(false);
@@ -44,7 +45,7 @@ public class SlotController : MonoBehaviour
             }
             else
             {
-                //Je le garde volontairement.
+                //Je l'ai gardé pour aide visuel sinon la personne pourrait penser que c'est un bug vu que ca accept pas. Meme si ca dit de ne pas laisser de print.
                 print("Slot cannot accept item");
                 return;
             }

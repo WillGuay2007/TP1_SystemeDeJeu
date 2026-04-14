@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class RecipeInfos : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private IconSlot firstIngredientIcon;
+    [SerializeField] private IconSlot secondIngredientIcon;
+    [SerializeField] private IconSlot resultIcon;
+
+    public void SetRecipe(CraftRecipe recipe)
     {
-        
+        firstIngredientIcon.SetItem(recipe.craftable1);
+        secondIngredientIcon.SetItem(recipe.craftable2);
+        resultIcon.SetItem(recipe.result);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

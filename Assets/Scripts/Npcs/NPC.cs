@@ -15,7 +15,7 @@ public abstract class NPC : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<PlayerController>())
+        if (other.CompareTag("Player"))
         {
             m_npcController.ExitNpc(this);
         }

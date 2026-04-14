@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class BossPursuitState : BossState
 {
+    private const float ATTACK_RANGE = 3f;
+    private const float RETREAT_RANGE = 25f;
+
     public BossPursuitState(BossStateMachine _stateMachine, string _animBool) : base(_stateMachine, _animBool)
     {
     }
@@ -9,17 +12,21 @@ public class BossPursuitState : BossState
     public override void OnEnter()
     {
         base.OnEnter();
-
-    }
-
-    public override void OnExit()
-    {
-        base.OnExit();
-
+        boss.Agent.SetDestination(boss.playerTarget.transform.position);
     }
 
     public override void OnUpdate()
     {
+        boss.Agent.SetDestination(boss.playerTarget.transform.position);
 
+        if (boss.CheckIfPlayerInRange(ATTACK_RANGE))
+        {
+            stateMachine.ChangeState(typeof(BossAttackState));
+            return;
+        }
+        if (!boss.CheckIfPlayerInRange(RETREAT_RANGE))
+        {
+            stateMachine.ChangeState(typeof(BossRetreatState));
+        }
     }
 }

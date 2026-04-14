@@ -21,8 +21,7 @@ public class CraftableSlot : Slot
         }
         else
         {
-            //Je le garde parce que c'est important sinon il y'a des confusions
-            print("Tried to assign a non craftable item to a craft slot.");
+            //print("Tried to assign a non craftable item to a craft slot.");
         }
     }
 }

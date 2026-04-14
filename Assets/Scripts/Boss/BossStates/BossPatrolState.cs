@@ -20,6 +20,11 @@ public class BossPatrolState : BossState
 
     public override void OnUpdate()
     {
+        if (boss.CheckIfPlayerInRange(Boss.DETECTION_RANGE))
+        {
+            stateMachine.ChangeState(typeof(BossPursuitState));
+            return;
+        }
         if (boss.HasCompletedPath())
         {
             stateMachine.ChangeState(typeof(BossIdleState));

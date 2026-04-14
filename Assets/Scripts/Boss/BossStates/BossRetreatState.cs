@@ -9,17 +9,14 @@ public class BossRetreatState : BossState
     public override void OnEnter()
     {
         base.OnEnter();
-
-    }
-
-    public override void OnExit()
-    {
-        base.OnExit();
-
+        boss.Agent.SetDestination(boss.startPosition);
     }
 
     public override void OnUpdate()
     {
-
+        if (boss.HasCompletedPath())
+        {
+            stateMachine.ChangeState(typeof(BossIdleState));
+        }
     }
 }

@@ -32,7 +32,7 @@ public class CraftingStation : MonoBehaviour
         m_craftingStationWindow.DestroySlots(); //Pas besoin de unsubscribe les events parce que les slots sont détruits, donc plus de listeners.
         HUDControllerV2.Instance.CloseWindow(m_craftingStationWindow);
     }
-
+    //J'ai décidé que chaque crafting station ont des recipes différents. Si un recipe marche pas, essaye une autre crafting station
     private void CheckRecipe()
     {
         CraftableItemSO item1 = m_craftingStationWindow.GetFirstIngredientSlot().GetItem() as CraftableItemSO;

@@ -7,11 +7,10 @@ public class ItemController : MonoBehaviour
     [SerializeField] private ItemDrop m_itemDropPrefab;
     public event Action<ItemSO> OnConsumableCollected;
     public event Action<ItemSO> OnPickupableCollected;
-    private InventoryController m_inventoryController;
 
     public void SetDependencies(GameController gameController)
     {
-        m_inventoryController = gameController.inventoryController;
+
     }
 
     public void Init()
@@ -32,12 +31,12 @@ public class ItemController : MonoBehaviour
         if (item.itemType == ItemSO.ItemType.Inventory)
         {
             OnPickupableCollected?.Invoke(item);
-            AudioManager.Instance.PlaySound(AudioManager.Sounds.PickItem);
+            AudioManager.Instance.PlayAudio(AudioManager.Sounds.PickItem);
         }
         else if (item.itemType == ItemSO.ItemType.Consumable)
         {
             OnConsumableCollected?.Invoke(item);
-            AudioManager.Instance.PlaySound(AudioManager.Sounds.ConsumeItem);
+            AudioManager.Instance.PlayAudio(AudioManager.Sounds.ConsumeItem);
         }
     }
 
