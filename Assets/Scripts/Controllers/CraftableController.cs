@@ -92,7 +92,7 @@ public class CraftableController : MonoBehaviour
             m_craftingWindow.SetCraftSliderValue(progressFraction);
             if (elapsedTime >= craftTime)
             {
-                m_itemController.SpawnItem(recipeToFollow.result, spawnPosition);
+                ItemFactory.Instance.CreateItem(recipeToFollow.result, spawnPosition);
                 AudioManager.Instance.PlayAudio(AudioManager.Sounds.ItemCrafted);
                 HUDControllerV2.Instance.CloseWindow(m_craftingWindow);
                 CraftCompleted?.Invoke();

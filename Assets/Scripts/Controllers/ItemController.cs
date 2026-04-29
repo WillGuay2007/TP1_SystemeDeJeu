@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    [SerializeField] private ItemDrop m_itemDropPrefab;
+    private const int START_ITEMS_GRID_X_OFFSET = -10;
+    private const int START_ITEMS_GRID_Z_OFFSET = -10;
+    private const int START_ITEMS_ROW_LENGTH = 3;
+    private const float ITEM_TOUCH_FLOOR_Y_POS = 0.625f;
+
     public event Action<ItemSO> OnConsumableCollected;
     public event Action<ItemSO> OnPickupableCollected;
+    [SerializeField] private ItemSO[] m_startItems;
 
     public void SetDependencies(GameController gameController)
     {
@@ -23,7 +28,7 @@ public class ItemController : MonoBehaviour
 
     public void InternalStart()
     {
-
+        CreateStartItems();
     }
 
     public void CollectItem(ItemSO item)
@@ -40,11 +45,21 @@ public class ItemController : MonoBehaviour
         }
     }
 
-    public ItemDrop SpawnItem(ItemSO item, Vector3 position)
+    private void CreateStartItems()
     {
-        ItemDrop itemDrop = Instantiate(m_itemDropPrefab, position, Quaternion.identity);
-        itemDrop.SetSO(item);
-        itemDrop.Init(this);
-        return itemDrop;
+        for (int itemTypeIndex = 0; itemTypeIndex < m_startItems.Length; itemTypeIndex++)
+        {
+            ItemSO itemData = m_startItems[itemTypeIndex];
+            for (int rowIndex = 0; rowIndex < START_ITEMS_ROW_LENGTH; rowIndex++)
+            {
+                Vector3 itemSpawnPosition = new Vector3(
+                    START_ITEMS_GRID_X_OFFSET + itemTypeIndex,
+                    ITEM_TOUCH_FLOOR_Y_POS,
+                    START_ITEMS_GRID_X_OFFSET + rowIndex
+                    );
+
+                ItemFactory.Instance.CreateItem(itemData, itemSpawnPosition);
+            }
+        }
     }
 }
