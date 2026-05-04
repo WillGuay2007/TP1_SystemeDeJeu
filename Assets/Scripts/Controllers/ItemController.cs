@@ -45,6 +45,7 @@ public class ItemController : MonoBehaviour
         }
     }
 
+    //L'item de quete je l'ai mit manuellement dans la scene parce que je veut pas le hardcoder.
     private void CreateStartItems()
     {
         for (int itemTypeIndex = 0; itemTypeIndex < m_startItems.Length; itemTypeIndex++)

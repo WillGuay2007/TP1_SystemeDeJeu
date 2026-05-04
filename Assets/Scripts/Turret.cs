@@ -8,7 +8,6 @@ public class Turret : MonoBehaviour
 
     [SerializeField] private GameObject m_target;
     [SerializeField] private GameObject m_turretPivot;
-    [SerializeField] private GameObject m_turretHead;
     [SerializeField] private GameObject m_bulletSpawn;
     [SerializeField] private PrefabPool m_bulletPrefabPool;
 

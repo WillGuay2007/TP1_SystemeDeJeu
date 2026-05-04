@@ -21,7 +21,7 @@ public class PrefabPool : MonoBehaviour
         {
             GameObject newPrefab = Instantiate(m_prefab);
             T component = newPrefab.GetComponent<T>();
-            if (component == null)             {
+            if (component == null) {
                 Debug.LogError("The prefab does not contain a component of type " + typeof(T).Name + ".");
                 Destroy(newPrefab);
                 return null;

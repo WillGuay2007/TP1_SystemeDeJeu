@@ -52,8 +52,9 @@ public class HealthController : MonoBehaviour
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0, m_maxHealth);
     }
 
-    private void Damage(float damage)
+    public void Damage(float damage)
     {
+        if (CurrentHealth <= 0) return;
         if (CurrentHealth > 0 && CurrentHealth - damage <= 0f)
         {
             //print("[HEALTH CONTROLLER] -> Player died. Inputs disabled. Game ended.");

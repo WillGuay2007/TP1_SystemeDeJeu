@@ -3,7 +3,7 @@ using UnityEngine;
 public class BossPursuitState : BossState
 {
     private const float ATTACK_RANGE = 3f;
-    private const float RETREAT_RANGE = 25f;
+    private const float RETREAT_RANGE = 22f;
 
     public BossPursuitState(BossStateMachine _stateMachine, string _animBool) : base(_stateMachine, _animBool)
     {

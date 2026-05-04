@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private Rigidbody m_rigidBody;
     private Coroutine m_launchCoroutine;
     private const float BULLET_VELOCITY_PER_SECOND = 25f;
     public void Launch(Vector3 direction)
@@ -16,13 +17,13 @@ public class Bullet : MonoBehaviour
         {
             StopCoroutine(m_launchCoroutine);
             m_launchCoroutine = null;
+            m_rigidBody.linearVelocity = Vector3.zero;
         }
     }
 
-    //TODO: Make it so it actually collide. I think its because of rigid body
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        print(collision.gameObject.name);
+        if (other.tag == "Obstacle") StopLaunch();
     }
 
     private IEnumerator StartBulletLaunch(Vector3 direction)
@@ -30,12 +31,12 @@ public class Bullet : MonoBehaviour
         while (true)
         {
             MoveBullet(direction);
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
     }
 
     private void MoveBullet(Vector3 direction)
     {
-        transform.Translate(direction * BULLET_VELOCITY_PER_SECOND * Time.deltaTime);
+        m_rigidBody.linearVelocity = direction * BULLET_VELOCITY_PER_SECOND;
     }
 }

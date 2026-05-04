@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public PlayerMoveState moveState { get; private set; }
     public PlayerJumpState jumpState { get; private set; }
     public PlayerInAirState inAirState { get; private set; }
+    [SerializeField] private HealthController m_healthController;
     [SerializeField] private PlayerInputController m_inputManager;
     public PlayerInputController inputManager => m_inputManager;
     public Rigidbody rigidBody { get; private set; }
@@ -35,7 +36,9 @@ public class PlayerController : MonoBehaviour
         if (collectible != null)
         {
             collectible.Collect();
+            return;
         }
+        if (other.tag == "Bullet") m_healthController.Damage(10);
     }
 
     private void Start()
